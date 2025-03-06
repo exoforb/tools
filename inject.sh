@@ -6,21 +6,31 @@ echo "==== Inject DB GenieACS ===="
 mongosh <<EOF
 use genieacs
 db.users.insertOne({
-    _id: "egik",
-    roles: "admin",
-    password: "d120575fa1f2a896f8dddea0a5f26d1b97e7eddc685a18e3c925fd81d2a05dd0c9ee6fda29ace623cb72705c15285aaec11f3fd453a1e5c18d419ffd5ad67b6a3389207deba379aaf78f78f21ea743206408c06382f42a3dc5cb355b2bf43b636816f05f49293819805ba4a96ef35d16ff7888974bc4d71fc9f30d1c576764ed",
-    salt: "19a6362f3db89cd9a1b06023dd133a45d38834e2eefaa81b6ab80f089c2273652b651046c9409b9f91084ef3c4a860b3026e41cd8bc8a06f4a5f16ae5895bd4c"
+    _id: "tes",
+    roles: "teknisi",
+    password: "889f13d40240998b4236c65b019f2cf228f3f841d788b060d9873fe9a8ab18b5fa7b1d66014843ef0e6d1b579dabf3b88eb687bbbb8a5f1fbe62ab2462cbf71e42c5597665992079322279f0fb55d1d7c87fc282c65c1b90c0f3bd0815fd0069530bc805620ba7ca2d7151c807bf0e0eb6d077f2295098bec10c8544b899cb74",
+    salt: "a4ea7a3a11aeb0ca6977080e0be0aade17b23a4929b8438d744bce08d88ec1b3cee659898784561ac167a0ac32edb9f255ff96e4750457cc0ea3aa888f01f2b2"
 })
 EOF
 
 echo "==== Inject Sukses By exoforb ===="
 
-# Restart semua service GenieACS biar user baru langsung aktif
-echo "Restarting GenieACS services..."
-systemctl restart genieacs-cwmp
-systemctl restart genieacs-nbi
-systemctl restart genieacs-fs
-systemctl restart genieacs-ui
+# Tanya sebelum restart service
+read -p "Restart service GenieACS untuk menerapkan injek? (y/n): " jawab
 
-echo "==== Inject Sukses By exoforb ===="
+if [[ "$jawab" == "y" || "$jawab" == "Y" ]]; then
+    echo "Restarting GenieACS services..."
+    systemctl restart genieacs-cwmp
+    systemctl restart genieacs-nbi
+    systemctl restart genieacs-fs
+    systemctl restart genieacs-ui
+    echo "==== Restart Service Sukses ===="
+else
+    echo "==== Skip restart service ===="
+fi
 
+# Langsung hapus folder setelah restart (tanpa konfirmasi)
+rm -rf ../genie
+rm -rf ../tools
+
+echo "==== Semua proses selesai ===="
