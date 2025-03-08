@@ -1,0 +1,33 @@
+
+services:
+  pnbrad:
+    image: agstr/pnb:latest
+    container_name: PNBRAD
+    ports:
+      - 1812-1813:1812-1813/udp
+      - 9980:80
+      - 9306:3306
+      - 922:22
+    restart: unless-stopped
+    logging:
+        driver: "json-file"
+        options: 
+            max-size: "1m"
+            max-file: "3"
+    privileged: true
+    environment:
+        #database config
+          - DB_DATABASE=pnbrad
+          - DB_USERNAME=pnb
+          - DB_PASSWORD=12345678
+         
+        #Set timezone
+          - TIME_ZONE=Asia/Jakarta
+          
+        #ssh root password
+          - ROOT_PASSWORD=12345678
+          
+        #freeradius config
+          - RADIUS_SECRET=pnb123
+          - RADIUS_CLIENT=0.0.0.0
+          - RADIUS_LOG_AUTH=no
